@@ -24,10 +24,10 @@ L'application suit le modèle microservices 3-tiers classique :
 
 ```mermaid
 graph LR
-    User[Utilisateur] -- HTTP/8080 --> Front[Pod Frontend (Nginx+React)]
-    Front -- REST API --> Back[Pod Backend (Node.js)]
-    Back -- TCP/5432 --> DB[(Pod PostgreSQL)]
-    DB -- Mount --> PVC[Volume Persistant]
+    User["Utilisateur"] -- "HTTP/8080" --> Front["Pod Frontend (Nginx+React)"]
+    Front -- "REST API" --> Back["Pod Backend (Node.js)"]
+    Back -- "TCP/5432" --> DB[("Pod PostgreSQL")]
+    DB -- "Mount" --> PVC["Volume Persistant"]
 ```
 
 ## ⚙️ Choix Kubernetes
@@ -38,4 +38,3 @@ graph LR
 * **Sondes (Probes)** :
     * *Liveness* : Vérifie si le processus tourne.
     * *Readiness* : Vérifie (pour le backend) si la connexion DB est active avant d'accepter du trafic.
-

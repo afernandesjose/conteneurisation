@@ -1,3 +1,4 @@
+<img width="955" height="477" alt="image" src="https://github.com/user-attachments/assets/d2eb671b-d0b6-4295-883f-79addd29d0b2" />
 # 📝 Kubernetes Todo App (3-Tiers)
 
 Application de gestion de tâches (Todo List) déployée sur Kubernetes suivant une architecture 3-tiers stricte et sécurisée.

@@ -1,0 +1,17 @@
+# Dépendances Node.js (très lourd !)
+node_modules/
+app/front/node_modules/
+app/back/node_modules/
+
+# Builds de production
+dist/
+app/front/dist/
+
+# Fichiers systèmes et logs
+.DS_Store
+*.log
+.minikube/
+
+# IDE
+.vscode/
+.idea/

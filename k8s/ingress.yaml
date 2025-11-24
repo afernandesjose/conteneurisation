@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: todo-ingress
+  labels:
+    app: todo-app
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # Optionnel: réécriture d'URL si besoin, mais ici simple routage
+spec:
+  rules:
+  - host: todo-app.local
+    http:
+      paths:
+      # Route vers l'API Backend
+      - path: /api/todos
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3001
+      # Route vers le Frontend (racine)
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80

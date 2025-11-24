@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-app-config
+  labels:
+    app: todo-app
+data:
+  # DB Config (non sensibles)
+  POSTGRES_DB: todo_db
+  POSTGRES_HOST: postgres-service
+  # Backend Config
+  BACKEND_PORT: "3001"
+  # Frontend Config (URL de l'API exposée par l'Ingress)
+  VITE_API_URL: "http://todo-app.local/api/todos" 

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  labels:
+    app: todo-front
+    tier: frontend
+spec:
+  selector:
+    app: todo-front
+  ports:
+    - protocol: TCP
+      port: 80         # Port d'entrée du service (interne cluster)
+      targetPort: 8080 # Port du conteneur (celui qu'on a fixé dans Nginx)
+  type: ClusterIP

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: todo-back
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-back
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: todo-back
+        tier: backend
+    spec:
+      securityContext:
+        # Meilleure pratique : rouler en tant que non-root
+        runAsNonRoot: true
+        runAsUser: 1000 # L'UID de l'utilisateur 'nodeuser' dans le Dockerfile
+      containers:
+      - name: todo-backend
+        image: todo-backend:latest # Image locale construite par Docker
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3001
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: todo-app-config
+              key: BACKEND_PORT
+        envFrom:
+        - configMapRef:
+            name: todo-app-config
+        - secretRef:
+            name: postgres-credentials
+        
+        # Probes - Liveness (serveur est vivant)
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        
+        # Probes - Readiness (serveur et DB sont prêts)
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          failureThreshold: 5 # Donne plus de temps pour la connexion DB
+        
+        # Limites de ressources
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            cpu: "300m"
+            memory: "300Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: todo-back
+    tier: backend
+spec:
+  selector:
+    app: todo-back
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+  type: ClusterIP
